@@ -1,3 +1,6 @@
 pandas
 numpy
 jupyter
+SQLAlchemy
+python-dotenv
+psycopg2
