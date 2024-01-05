@@ -100,3 +100,7 @@ USER redash
 
 ENTRYPOINT ["/app/bin/docker-entrypoint"]
 CMD ["server"]
+
+
+#ENV HTTP_TIMEOUT=600
+
