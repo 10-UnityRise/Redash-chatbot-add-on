@@ -18,11 +18,11 @@ port = os.getenv("DB_PORT")
 database = os.getenv("DB_DATABASE")
 
 # 1.2 Construction of database connection string
-database_url = f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{database}"
+database_url = f"postgresql+psycopg2://{username}:{password}@{host}/{database}"
 
 # 2. Engine and Base setup
 # 2.1. Create an SQLAlchemy engine using the connection string
-engine = engine_create(database_url, echo=True)  # set echo=True for debug logging
+engine = create_engine(database_url, echo=True)  # set echo=True for debug logging
 
 # 2.2. Define the SQLAlchemy declarative base
 Base = declarative_base()  
