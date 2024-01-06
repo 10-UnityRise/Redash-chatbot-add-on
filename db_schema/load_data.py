@@ -1,20 +1,21 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import text
 import os
 import pandas as pd
 from schema import Base, MergedData
 from dotenv import load_dotenv
+import sys
+import psycopg2
+
+load_dotenv()
 
 # Retrieve database connection details from environment variables using os.getenv.
 username = os.getenv("DB_USERNAME")
 password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
-#port = os.getenv("DB_PORT")
+port = os.getenv("DB_PORT")
 database = os.getenv("DB_DATABASE")
-
-# Define the database connection string (SQLite in this example)
-# database_url = 'sqlite:///merged_data.db'
-database_url = f"postgresql+psycopg2://{username}:{password}@{host}/{database}"
 
 def create_database():
     # Create an SQLAlchemy engine
@@ -29,9 +30,6 @@ def create_database():
 
 def load_data(session, subfolder):
     try:
-        # Construct the file path for each CSV within the subfolder
-        merged_data_path = os.path.join(subfolder, 'merged_data.csv')
-
         # Read the merged data from CSV
         merged_data = pd.read_csv(merged_data_path)
 
@@ -46,7 +44,7 @@ def load_data(session, subfolder):
 
 def main():
     # Specify the base folder
-    base_folder = 'data'
+    base_folder = '../data'
 
     # Get a list of all subfolders in the base folder
     subfolders = [f.path for f in os.scandir(base_folder) if f.is_dir()]

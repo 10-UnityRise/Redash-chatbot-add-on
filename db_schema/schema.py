@@ -4,15 +4,22 @@ from sqlalchemy.orm import sessionmaker
 import os
 import pandas as pd
 from dotenv import load_dotenv
+import psycopg2
+
+load_dotenv()
 
 username = os.getenv("DB_USERNAME")
 password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
-#port = os.getenv("DB_PORT")
+port = os.getenv("DB_PORT")
 database = os.getenv("DB_DATABASE")
-# Define the database connection string (SQLite in this example)
-# database_url = 'sqlite:///merged_data.db'
-database_url = f"postgresql+psycopg2://{username}:{password}@{host}/{database}"
+
+# Add error checking or default values
+if None in (username, password, host, port, database):
+    print("Error: Some environment variables are missing.")
+    sys.exit(1)
+
+database_url = f"postgresql://{username}:{password}@{host}:{port}/{database}"
 
 # Create an SQLAlchemy engine
 engine = create_engine(database_url, echo=True)  # Set echo=True for debug logging
@@ -42,7 +49,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 # Specify the base folder
-base_folder = 'data'
+base_folder = '../data'
 
 # Get a list of all subfolders in the base folder
 subfolders = [f.path for f in os.scandir(base_folder) if f.is_dir()]

@@ -4,3 +4,9 @@ jupyter
 SQLAlchemy
 python-dotenv
 psycopg2
+openai
+requests
+pprintjson
+tiktoken
+tenacity
+termcolor
