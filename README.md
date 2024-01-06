@@ -24,3 +24,4 @@ Summarization of visualizations
 - Auto-generation of new Redash dashboards
 
 This GitHub repository serves as a central hub for collaboration and development, fostering innovation in BI and data analysis using Redash.
+

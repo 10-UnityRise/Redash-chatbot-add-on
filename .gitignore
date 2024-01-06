@@ -160,3 +160,6 @@ week3/
 
 #mlflow folders
 mlruns/
+
+# data
+youtube-data/**
