@@ -12,13 +12,13 @@ from dotenv import load_dotenv
 # 1. Database connection setup
 # 1.1 Loading environment variables
 username = os.getenv("DB_USERNAME")
-passwrod = os.getenv("DB_PASSWORD")
+password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
 port = os.getenv("DB_PORT")
 database = os.getenv("DB_DATABASE")
 
 # 1.2 Construction of database connection string
-database_url = f"postgresql+psycopg2://{username}:{passwrod}@{host}:{port}/{database}"
+database_url = f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{database}"
 
 # 2. Engine and Base setup
 # 2.1. Create an SQLAlchemy engine using the connection string

@@ -5,57 +5,59 @@ import pandas as pd
 from schema import Base, MergedData
 from dotenv import load_dotenv
 
-# Retrieve database connection details from environment variables using os.getenv.
+# 1. Database connection setup
+# 1.1 Loading environment variables
 username = os.getenv("DB_USERNAME")
 password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
-#port = os.getenv("DB_PORT")
+port = os.getenv("DB_PORT")
 database = os.getenv("DB_DATABASE")
 
-# Define the database connection string (SQLite in this example)
-# database_url = 'sqlite:///merged_data.db'
-database_url = f"postgresql+psycopg2://{username}:{password}@{host}/{database}"
+# 1.2 Construction of database connection string
+database_url = f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{database}"
 
 def create_database():
-    # Create an SQLAlchemy engine
-    engine = create_engine(database_url, echo=True)  # Set echo=True for debug logging
+    #Create an SQLAlchemy engine using the connection string
+    engine = engine_create(database_url, echo=True)  # set echo=True for debug logging
 
-    # Create the table in the database
+    # create the table in the database
     Base.metadata.create_all(engine)
 
-    # Create a session to interact with the database
-    Session = sessionmaker(bind=engine)
-    return Session()
+    # create a session to interact with the database
+    session = sessionmaker(bind = engine)
+
+    return session()
 
 def load_data(session, subfolder):
-    try:
-        # Construct the file path for each CSV within the subfolder
-        merged_data_path = os.path.join(subfolder, 'merged_data.csv')
+    try: 
+        # construct the file path for each CSV within ghe subfolder
+        merged_data_path = os.path.join(subfolder, 'chart_totals_table.csv')
 
         # Read the merged data from CSV
-        merged_data = pd.read_csv(merged_data_path)
+        chart_totals_table = pd.read_csv(chart_totals_table)    
 
         # Convert the DataFrame to a list of dictionaries
-        data_to_insert = merged_data.to_dict(orient='records')
+        data_to_insert = chart_totals_table.to_dict(orient = 'records')
 
         # Insert data into the database
         session.bulk_insert_mappings(MergedData, data_to_insert)
 
     except Exception as e:
-        print(f"Error processing {subfolder}: {str(e)}")
+        print(f"Error processing {subfolder}: {e}")
+
 
 def main():
-    # Specify the base folder
+    # specify the base folder
     base_folder = 'data'
 
     # Get a list of all subfolders in the base folder
-    subfolders = [f.path for f in os.scandir(base_folder) if f.is_dir()]
+    subfolders_2 = [f.path for f in os.scandir(base_folder) if f.is_dir()]
 
     # Create a session and connect to the database
     session = create_database()
 
     # Iterate through each subfolder
-    for subfolder in subfolders:
+    for subfolder in subfolders_2:
         load_data(session, subfolder)
 
     # Commit the changes to the database
@@ -66,3 +68,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
