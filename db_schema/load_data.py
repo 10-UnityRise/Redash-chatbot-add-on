@@ -5,6 +5,7 @@ import pandas as pd
 from schema import Base, MergedData
 from dotenv import load_dotenv
 
+# Retrieve database connection details from environment variables using os.getenv.
 username = os.getenv("DB_USERNAME")
 password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
