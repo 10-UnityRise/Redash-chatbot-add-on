@@ -1,5 +1,18 @@
 # Redash Chat Add-On for YouTube Data Exploration
 
+## Table of content
+- [Redash Chat Add-On for YouTube Data Exploration](#redash-chat-add-on-for-youtube-data-exploration)
+  - [Overview](#overview)
+  - [Business Need](#business-need)
+  - [Project Scope](#project-scope)
+  - [Key Features](#key-features)
+  - [Installation](#installation)
+  - [Getting Started](#getting-started)
+  - [Data Sources](#data-sources)
+  - [Screenshots](#screenshots)
+  - [Contributions](#contributions)
+  - [License](#license)
+
 ## Overview
 Welcome to the GitHub repository for our innovative Redash chat add-on designed to revolutionize data analysis capabilities, with a specific focus on comprehensive YouTube data exploration. This project aims to empower our team members by enabling seamless conversations in a question-and-answer format, allowing for autonomous knowledge discovery through natural language interactions.
 
@@ -23,5 +36,58 @@ Summarization of visualizations
 - Auto-generation of SQL queries and visualizations
 - Auto-generation of new Redash dashboards
 
-This GitHub repository serves as a central hub for collaboration and development, fostering innovation in BI and data analysis using Redash.
+## Installation
 
+1. **Clone this Repository:**
+
+    Clone this repository:
+    ```bash 
+    git clone https://github.com/AbelBekele/10-Academy-Week-2.git
+    ```
+
+    Install the required dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+2. **Set Up Python Environment:**
+
+    ```bash
+    python -m venv your_env_name
+    ```
+
+    Replace `your_env_name` with the desired name for your environment.
+    
+    **Activate the Environment:**
+
+    - On Windows:
+
+    ```bash
+    .\your_env_name\scripts\activate
+    ```
+
+    - On macOS/Linux:
+
+    ```bash
+    source your_env_name/bin/activate
+    ```
+
+## Getting Started
+
+Explore the repository to understand the project structure and components. Refer to the [Installation](#installation) section for setup instructions. Detailed documentation for each component is available within their respective folders.
+
+Navigate to the `Redash/app/components/chat` folder to the frontend part of the project.
+
+Navigate to the `Redash/redash/handlers/chatbot` folder to the backend part of the project.
+
+## Screenshots
+
+Navigate to the `screenshots` folder to view visual representations of the project.
+
+## Contributions
+
+We welcome contributions to this repository. Please submit pull requests with improvements to code, documentation, or visualizations. Refer to the [Contribution Guidelines](CONTRIBUTING.md) for details.
+
+## License
+
+This repository is licensed under the [MIT License](LICENSE).
