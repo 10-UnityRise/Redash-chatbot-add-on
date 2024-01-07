@@ -1,5 +1,18 @@
 # Redash Chat Add-On for YouTube Data Exploration
 
+## Table of content
+- [Redash Chat Add-On for YouTube Data Exploration](#redash-chat-add-on-for-youtube-data-exploration)
+  - [Overview](#overview)
+  - [Business Need](#business-need)
+  - [Project Scope](#project-scope)
+  - [Key Features](#key-features)
+  - [Installation](#installation)
+  - [Getting Started](#getting-started)
+  - [Data Sources](#data-sources)
+  - [Screenshots](#screenshots)
+  - [Contributions](#contributions)
+  - [License](#license)
+
 ## Overview
 Welcome to the GitHub repository for our innovative Redash chat add-on designed to revolutionize data analysis capabilities, with a specific focus on comprehensive YouTube data exploration. This project aims to empower our team members by enabling seamless conversations in a question-and-answer format, allowing for autonomous knowledge discovery through natural language interactions.
 
@@ -22,6 +35,3 @@ Summarization of visualizations
 - Insights extraction from existing SQL queries
 - Auto-generation of SQL queries and visualizations
 - Auto-generation of new Redash dashboards
-
-This GitHub repository serves as a central hub for collaboration and development, fostering innovation in BI and data analysis using Redash.
-
