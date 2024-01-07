@@ -84,5 +84,10 @@ Navigate to the `Redash/redash/handlers/chatbot` folder to the backend part of t
 
 Navigate to the `screenshots` folder to view visual representations of the project.
 
+## Contributions
 
-This GitHub repository serves as a central hub for collaboration and development, fostering innovation in BI and data analysis using Redash.
+We welcome contributions to this repository. Please submit pull requests with improvements to code, documentation, or visualizations. Refer to the [Contribution Guidelines](CONTRIBUTING.md) for details.
+
+## License
+
+This repository is licensed under the [MIT License](LICENSE).
