@@ -1,5 +1,5 @@
 import React,{ useState} from 'react'
-import redashpng from "@/assets/images/favicon-96x96.png";
+import redashpng from "@/assets/images/favin-96x96.png";
 import './chatbox.less'
 import Chat from '@/services/chat';
 import { IoCopy } from "react-icons/io5";

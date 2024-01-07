@@ -88,6 +88,10 @@ xlsxwriter = "1.2.2"
 tzlocal = "4.3.1"
 openai = "^1.6.1"
 termcolor = "^2.4.0"
+certifi = "2019.9.11"
+chardet = "3.0.4"
+idna = "2.8"
+redash-api-client = "^0.3.0"
 
 [tool.poetry.group.all_ds]
 optional = true
@@ -141,6 +145,7 @@ trino = ">=0.305,<1.0"
 vertica-python = "1.1.1"
 xlrd = "2.0.1"
 e6data-python-connector = "1.1.9"
+
 
 [tool.poetry.group.ldap3]
 optional = true
