@@ -38,14 +38,21 @@ def get_column_names(engine, table_name):
     """Return a list of column names."""
     column_names = []
     inspector = inspect(engine)
-    columns = inspector.get_columns(table_name)
     
-    if columns:
-        for column in columns:
-            column_names.append(f'"{column["name"]}"')  # Add double quotes around column name
+    try:
+        columns = inspector.get_columns(table_name)
+        
+        if columns is not None:  # Check if columns is not None
+            for column in columns:
+                column_names.append(f'"{column["name"]}"')  # Add double quotes around column name
+        else:
+            print(f"No columns found for table: {table_name}")
+    
+    except Exception as e:
+        print(f"Error fetching columns for table {table_name}: {e}")
     
     return column_names
-
+    
 def get_database_info(engine):
     """Return a list of dicts containing the table name and columns for each table in the database."""
     table_dicts = []
@@ -110,12 +117,58 @@ class ChatResource(BaseResource):
             print(f"Exception: {e}")
             return e
 
+    def create_query(self, ds_id, name, qry, desc="", with_results=True, options=None):
+        if options is None or not isinstance(options, dict):
+            options = {}
+
+        payload = {
+            "data_source_id": ds_id,
+            "name": name,
+            "query": qry,
+            "description": desc,
+            "options": options
+        }
+
+        # Assuming you have a post method to handle API requests to Redash
+        # Replace this with the actual endpoint and method for creating queries
+        res = self.post('queries', payload)
+
+        if with_results:
+            self.generate_query_results(ds_id, qry)
+
+        return res
+
+    def ask_database(self, engine, query):
+        """Function to handle different types of queries, including 'Create_query'."""
+        try:
+            if query.startswith("Create_query"):
+                # Extract parameters from the Create_query format
+                match = re.match(r'Create_query\((\d+), "(.*?)", "(.*?)", "(.*?)", (.+?)\)', query)
+                if match:
+                    ds_id, name, qry, desc, with_results_str = match.groups()
+                    with_results = bool(with_results_str.lower() == "true")
+                    options = {}
+                    # Call the create_query function
+                    results = self.create_query(int(ds_id), name, qry, desc, with_results, options)
+                else:
+                    results = "Invalid 'Create_query' format in the assistant's message"
+            else:
+                # Execute a regular SQL query
+                with engine.connect() as conn:
+                    result = conn.execute(query)
+                    results = [dict(row) for row in result]
+        except Exception as e:
+            results = f"Query failed with error: {e}"
+        return results
+
+    # ... (remaining methods)
+
     @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
     def post(self):
         try:
             value = request.get_json()
             question = value.get('question')
-            
+
             # Define the 'tools' variable here or pass it as a parameter based on your needs
             tools = [
                 {
@@ -129,11 +182,11 @@ class ChatResource(BaseResource):
                                 "query": {
                                     "type": "string",
                                     "description": f"""
-                                            SQL query extracting info to answer the user's question.
-                                            SQL should be written using this database schema:
-                                            {self.database_schema_string}
-                                            The query should be returned in plain text, not in JSON.
-                                            """,
+                                        SQL query extracting info to answer the user's question.
+                                        SQL should be written using this database schema:
+                                        {self.database_schema_string}
+                                        The query should be returned in plain text, not in JSON.
+                                        """,
                                 }
                             },
                             "required": ["query"],
@@ -143,9 +196,11 @@ class ChatResource(BaseResource):
             ]
 
             messages = [
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system",
+                 "content": "You are a helpful assistant who generates SQL queries on the database and responds with the answer by running the: {self.ask_database} using the generated query by you. Don't complicate things. Generate only SQL syntax when prompted about any inquiries regarding SQL queries."},
                 {"role": "user", "content": question}
             ]
+            
             # Inside the post method
             response = self.chat_completion_request(messages, tools)
 
@@ -157,7 +212,22 @@ class ChatResource(BaseResource):
             else:
                 assistant_message = ""
 
-            if "ask_database" in assistant_message:
+            if "create_query" in question.lower() and assistant_message:
+                # Assuming 'assistant_message' contains the SQL syntax
+                query_params = {
+                    "ds_id": 1,  # Replace with the actual data source ID
+                    "name": "Generated Query",
+                    "qry": assistant_message,
+                    "desc": "Query generated by the assistant",
+                    "with_results": True,  # Adjust based on your requirements
+                    "options": None,  # Replace with actual options if needed
+                }
+
+                # Call the create_query function
+                results = self.create_query(**query_params)
+
+                response_data = {"answer": results, "query": assistant_message}
+            elif "ask_database" in assistant_message:
                 query_match = re.search(r'ask_database\((.*?)\)', assistant_message)
                 if query_match:
                     query = query_match.group(1)
@@ -172,16 +242,6 @@ class ChatResource(BaseResource):
         except Exception as error:
             print(error)
             return jsonify({"error": str(error)}), 500
-
-    def ask_database(self, engine, query):
-        """Function to query PostgreSQL database with a provided SQL query."""
-        try:
-            with engine.connect() as conn:
-                result = conn.execute(query)
-                results = [dict(row) for row in result]
-        except Exception as e:
-            results = f"Query failed with error: {e}"
-        return results
 
 if __name__ == "__main__":
     app.run(debug=True)
